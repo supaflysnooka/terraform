@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ns1/ns1-go"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/ns1/ns1-go/rest/model/dns"
+	nsone "gopkg.in/ns1/ns1-go.v2/rest"
 )
 
 func TestAccZone_basic(t *testing.T) {
@@ -76,7 +77,7 @@ func testAccCheckZoneState(key, value string) resource.TestCheckFunc {
 	}
 }
 
-func testAccCheckZoneExists(n string, zone *nsone.Zone) resource.TestCheckFunc {
+func testAccCheckZoneExists(n string, zone *dns.Zone) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 
@@ -126,7 +127,7 @@ func testAccCheckZoneDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckZoneAttributes(zone *nsone.Zone) resource.TestCheckFunc {
+func testAccCheckZoneAttributes(zone *dns.Zone) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		if zone.Ttl != 3600 {
 			return fmt.Errorf("Bad value : %d", zone.Ttl)
@@ -140,7 +141,7 @@ func testAccCheckZoneAttributes(zone *nsone.Zone) resource.TestCheckFunc {
 	}
 }
 
-func testAccCheckZoneAttributesUpdated(zone *nsone.Zone) resource.TestCheckFunc {
+func testAccCheckZoneAttributesUpdated(zone *dns.Zone) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		if zone.Ttl != 3601 {
 			return fmt.Errorf("Bad value : %d", zone.Ttl)

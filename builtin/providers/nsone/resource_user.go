@@ -1,8 +1,9 @@
 package nsone
 
 import (
-	"github.com/ns1/ns1-go"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/ns1/ns1-go/rest/model/account"
+	nsone "gopkg.in/ns1/ns1-go.v2/rest"
 )
 
 func addPermsSchema(s map[string]*schema.Schema) map[string]*schema.Schema {
@@ -133,7 +134,7 @@ func userResource() *schema.Resource {
 	}
 }
 
-func permissionsToResourceData(d *schema.ResourceData, permissions nsone.PermissionsMap) {
+func permissionsToResourceData(d *schema.ResourceData, permissions account.PermissionsMap) {
 	d.Set("dns_view_zones", permissions.Dns.ViewZones)
 	d.Set("dns_manage_zones", permissions.Dns.ManageZones)
 	d.Set("dns_zones_allow_by_default", permissions.Dns.ZonesAllowByDefault)
@@ -155,7 +156,7 @@ func permissionsToResourceData(d *schema.ResourceData, permissions nsone.Permiss
 	d.Set("monitoring_view_jobs", permissions.Monitoring.ViewJobs)
 }
 
-func userToResourceData(d *schema.ResourceData, u *nsone.User) error {
+func userToResourceData(d *schema.ResourceData, u *account.User) error {
 	d.SetId(u.Username)
 	d.Set("name", u.Name)
 	d.Set("email", u.Email)
@@ -167,7 +168,7 @@ func userToResourceData(d *schema.ResourceData, u *nsone.User) error {
 	return nil
 }
 
-func resourceDataToUser(u *nsone.User, d *schema.ResourceData) error {
+func resourceDataToUser(u *account.User, d *schema.ResourceData) error {
 	u.Name = d.Get("name").(string)
 	u.Username = d.Get("username").(string)
 	u.Email = d.Get("email").(string)
@@ -190,8 +191,8 @@ func resourceDataToUser(u *nsone.User, d *schema.ResourceData) error {
 
 // UserCreate creates the given user in ns1
 func UserCreate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*nsone.APIClient)
-	mj := nsone.User{}
+	client := meta.(*nsone.Client)
+	mj := account.User{}
 	if err := resourceDataToUser(&mj, d); err != nil {
 		return err
 	}
@@ -203,7 +204,7 @@ func UserCreate(d *schema.ResourceData, meta interface{}) error {
 
 // UserRead  reads the given users data from ns1
 func UserRead(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*nsone.APIClient)
+	client := meta.(*nsone.Client)
 	mj, err := client.GetUser(d.Id())
 	if err != nil {
 		return err
@@ -214,7 +215,7 @@ func UserRead(d *schema.ResourceData, meta interface{}) error {
 
 // UserDelete deletes the given user from ns1
 func UserDelete(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*nsone.APIClient)
+	client := meta.(*nsone.Client)
 	err := client.DeleteUser(d.Id())
 	d.SetId("")
 	return err
@@ -222,8 +223,8 @@ func UserDelete(d *schema.ResourceData, meta interface{}) error {
 
 // UserUpdate updates the user with given parameters in ns1
 func UserUpdate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*nsone.APIClient)
-	mj := nsone.User{
+	client := meta.(*nsone.Client)
+	mj := account.User{
 		Username: d.Id(),
 	}
 	if err := resourceDataToUser(&mj, d); err != nil {

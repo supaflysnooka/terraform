@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ns1/ns1-go"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/ns1/ns1-go/rest/model/monitor"
+	nsone "gopkg.in/ns1/ns1-go.v2/rest"
 )
 
 func TestAccMonitoringJob_basic(t *testing.T) {
-	var mj nsone.MonitoringJob
+	var mj monitor.Job
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -29,7 +30,7 @@ func TestAccMonitoringJob_basic(t *testing.T) {
 }
 
 func TestAccMonitoringJob_updated(t *testing.T) {
-	var mj nsone.MonitoringJob
+	var mj monitor.Job
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -76,7 +77,7 @@ func testAccCheckMonitoringJobState(key, value string) resource.TestCheckFunc {
 	}
 }
 
-func testAccCheckMonitoringJobExists(n string, monitoringJob *nsone.MonitoringJob) resource.TestCheckFunc {
+func testAccCheckMonitoringJobExists(n string, monitoringJob *monitor.Job) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 
@@ -126,7 +127,7 @@ func testAccCheckMonitoringJobDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckMonitoringJobAttributes(mj *nsone.MonitoringJob) resource.TestCheckFunc {
+func testAccCheckMonitoringJobAttributes(mj *monitor.Job) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		if mj.Frequency != 60 {
 			return fmt.Errorf("Bad value : %d", mj.Frequency)
@@ -148,7 +149,7 @@ func testAccCheckMonitoringJobAttributes(mj *nsone.MonitoringJob) resource.TestC
 	}
 }
 
-func testAccCheckMonitoringJobAttributesUpdated(mj *nsone.MonitoringJob) resource.TestCheckFunc {
+func testAccCheckMonitoringJobAttributesUpdated(mj *monitor.Job) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		if mj.Frequency != 120 {
 			return fmt.Errorf("Bad value : %d", mj.Frequency)

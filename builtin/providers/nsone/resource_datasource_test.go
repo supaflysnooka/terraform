@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ns1/ns1-go"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/ns1/ns1-go/rest/model/data"
+	nsone "gopkg.in/ns1/ns1-go.v2/rest"
 )
 
 func TestAccDataSource_basic(t *testing.T) {
-	var dataSource nsone.DataSource
+	var dataSource data.Source
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -29,7 +30,7 @@ func TestAccDataSource_basic(t *testing.T) {
 }
 
 func TestAccDataSource_updated(t *testing.T) {
-	var dataSource nsone.DataSource
+	var dataSource data.Source
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -76,7 +77,7 @@ func testAccCheckDataSourceState(key, value string) resource.TestCheckFunc {
 	}
 }
 
-func testAccCheckDataSourceExists(n string, dataSource *nsone.DataSource) resource.TestCheckFunc {
+func testAccCheckDataSourceExists(n string, dataSource *data.Source) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 
@@ -126,7 +127,7 @@ func testAccCheckDataSourceDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckDataSourceAttributes(dataSource *nsone.DataSource) resource.TestCheckFunc {
+func testAccCheckDataSourceAttributes(dataSource *data.Source) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if dataSource.SourceType != "nsone_v1" {
@@ -137,7 +138,7 @@ func testAccCheckDataSourceAttributes(dataSource *nsone.DataSource) resource.Tes
 	}
 }
 
-func testAccCheckDataSourceAttributesUpdated(dataSource *nsone.DataSource) resource.TestCheckFunc {
+func testAccCheckDataSourceAttributesUpdated(dataSource *data.Source) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if dataSource.SourceType != "nsone_monitoring" {

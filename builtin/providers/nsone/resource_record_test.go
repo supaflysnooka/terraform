@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ns1/ns1-go"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/ns1/ns1-go/rest/model/dns"
+	nsone "gopkg.in/ns1/ns1-go.v2/rest"
 )
 
 func TestAccRecord_basic(t *testing.T) {
-	var record nsone.Record
+	var record dns.Record
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -29,7 +30,7 @@ func TestAccRecord_basic(t *testing.T) {
 }
 
 func TestAccRecord_updated(t *testing.T) {
-	var record nsone.Record
+	var record dns.Record
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -76,7 +77,7 @@ func testAccCheckRecordState(key, value string) resource.TestCheckFunc {
 	}
 }
 
-func testAccCheckRecordExists(n string, record *nsone.Record) resource.TestCheckFunc {
+func testAccCheckRecordExists(n string, record *dns.Record) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 
@@ -137,7 +138,7 @@ func testAccCheckRecordDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckRecordAttributes(record *nsone.Record) resource.TestCheckFunc {
+func testAccCheckRecordAttributes(record *dns.Record) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if record.Ttl != 60 {
@@ -165,7 +166,7 @@ func testAccCheckRecordAttributes(record *nsone.Record) resource.TestCheckFunc {
 	}
 }
 
-func testAccCheckRecordAttributesUpdated(record *nsone.Record) resource.TestCheckFunc {
+func testAccCheckRecordAttributesUpdated(record *dns.Record) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if record.Ttl != 120 {

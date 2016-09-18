@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ns1/ns1-go"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/ns1/ns1-go/rest/model/data"
+	nsone "gopkg.in/ns1/ns1-go.v2/rest"
 )
 
 func TestAccDataFeed_basic(t *testing.T) {
-	var dataFeed nsone.DataFeed
+	var dataFeed data.Feed
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -76,7 +77,7 @@ func testAccCheckDataFeedState(key, value string) resource.TestCheckFunc {
 	}
 }
 
-func testAccCheckDataFeedExists(n string, dsrc string, dataFeed *nsone.DataFeed) resource.TestCheckFunc {
+func testAccCheckDataFeedExists(n string, dsrc string, dataFeed *data.Feed) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 		ds, ok := s.RootModule().Resources[dsrc]
@@ -139,7 +140,7 @@ func testAccCheckDataFeedDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckDataFeedAttributes(dataFeed *nsone.DataFeed) resource.TestCheckFunc {
+func testAccCheckDataFeedAttributes(dataFeed *data.Feed) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if dataFeed.Config["label"] != "exampledc2" {
@@ -150,7 +151,7 @@ func testAccCheckDataFeedAttributes(dataFeed *nsone.DataFeed) resource.TestCheck
 	}
 }
 
-func testAccCheckDataFeedAttributesUpdated(dataFeed *nsone.DataFeed) resource.TestCheckFunc {
+func testAccCheckDataFeedAttributesUpdated(dataFeed *data.Feed) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
 		if dataFeed.Config["label"] != "exampledc3" {
