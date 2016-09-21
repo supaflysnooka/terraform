@@ -168,7 +168,7 @@ The following arguments are supported in the `provider` block:
   to prevent you mistakenly using a wrong one (and end up destroying live environment).
   Conflicts with `allowed_account_ids`.
 
-* `insecure` - (Optional) Optional) Explicitly allow the provider to
+* `insecure` - (Optional) Explicitly allow the provider to
   perform "insecure" SSL requests. If omitted, default value is `false`
 
 * `dynamodb_endpoint` - (Optional) Use this to override the default endpoint
